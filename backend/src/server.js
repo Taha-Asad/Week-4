@@ -5,8 +5,8 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import connectDB from "../config/db.js";
 import cors from "cors";
+import { app, server } from "./lib/socket.js";
 dotenv.config();
-const app = express();
 const PORT = process.env.PORT;
 //middlewares
 app.use(morgan("dev"));
@@ -29,6 +29,6 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/message", messageRouter);
 connectDB();
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started successfully on Port: ${PORT} `.bgWhite.blue);
 });

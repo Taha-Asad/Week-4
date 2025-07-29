@@ -12,8 +12,8 @@ import { ToastContainer } from "react-toastify";
 import { Loader } from "lucide-react";
 
 function App() {
-  const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
-
+  const { checkAuth, authUser, isCheckingAuth  , onlineUsers} = useAuthStore();
+console.log({onlineUsers})
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);

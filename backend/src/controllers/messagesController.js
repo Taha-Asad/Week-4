@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
+import { getReciverSocketId, io } from "../lib/socket.js";
 
 export const getUserSideBar = async (req, res) => {
   try {
@@ -57,6 +58,10 @@ export const sendMessage = async (req, res) => {
       text,
       image: imageUrl,
     });
+    const receiverSocketId = getReciverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(200).json(newMessage); // ✅ Return the message directly
   } catch (error) {
@@ -66,4 +71,3 @@ export const sendMessage = async (req, res) => {
     });
   }
 };
-
