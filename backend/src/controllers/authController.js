@@ -79,6 +79,13 @@ export const updateUser = async (req, res) => {
     const { email, password, profilePic } = req.body;
     const userId = req.user._id;
 
+    const existence = await User.findOne({ email });
+    if (existence) {
+      return res.status(400).json({
+        success: false,
+        message: `User by Email: ${email} already exists`,
+      });
+    }
     if (!email && !password && !profilePic) {
       return res.status(400).json({
         success: false,
