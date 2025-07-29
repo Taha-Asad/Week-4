@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
@@ -20,14 +21,16 @@ export const getUserSideBar = async (req, res) => {
 };
 export const getMessages = async (req, res) => {
   try {
-    const { id: userToChatId } = req.params;
-    const senderId = req.user._id;
+    const senderId = new mongoose.Types.ObjectId(req.user._id);
+    const userToChatId = new mongoose.Types.ObjectId(req.params.id);
+
     const messages = await Message.find({
       $or: [
         { senderId: senderId, receiverId: userToChatId },
         { senderId: userToChatId, receiverId: senderId },
       ],
-    });
+    }).sort({ createdAt: 1 });
+
     return res.status(200).json({ success: true, messages });
   } catch (error) {
     return res.status(500).json({
@@ -38,29 +41,29 @@ export const getMessages = async (req, res) => {
 };
 export const sendMessage = async (req, res) => {
   try {
-    const {text , image} = req.body;
-    const {id: receiverId} = req.params;
+    const { text, image } = req.body;
+    const { id: receiverId } = req.params;
     const senderId = req.user._id;
+
     let imageUrl;
-    if(image){
-        const uploadResponse = await cloudinary.uploader.upload(image);
-        imageUrl = uploadResponse.secure_url;
+    if (image) {
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
     }
+
     const newMessage = await Message.create({
-        senderId,
-        receiverId,
-        text,
-        image:imageUrl,
-    })
-    await newMessage.save();
-    // socket.io code 
+      senderId,
+      receiverId,
+      text,
+      image: imageUrl,
+    });
 
-
-    res.status(200).json({success:true , message:"Message sent" , newMessage})
+    res.status(200).json(newMessage); // ✅ Return the message directly
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: `Error in Get Messages Function: ${error.message}`,
+      message: `Error in Send Message Function: ${error.message}`,
     });
   }
 };
+

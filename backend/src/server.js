@@ -9,13 +9,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 //middlewares
-app.use(express.json());
 app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(express.json({ limit: '10mb' })); // adjust size as needed
+app.use(express.urlencoded({ limit: '10mb', extended: true }));app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
