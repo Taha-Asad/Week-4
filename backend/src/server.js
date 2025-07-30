@@ -6,8 +6,10 @@ import cookieParser from "cookie-parser";
 import connectDB from "../config/db.js";
 import cors from "cors";
 import { app, server } from "./lib/socket.js";
+import path from "path"
 dotenv.config();
 const PORT = process.env.PORT;
+const __dirname = path.resolve();
 //middlewares
 app.use(morgan("dev"));
 app.use(express.json({ limit: '10mb' })); // adjust size as needed
@@ -28,6 +30,13 @@ app.use("/api/v1/auth", authRouter);
 // Messages Route
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/message", messageRouter);
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname , "../../frontend/dist")));
+
+  app.get("*" , (req ,res)=>{
+    res.sendFile(path.join(__dirname , "../../frontend" , "dist" , "index.html"))
+  })
+}
 connectDB();
 server.listen(PORT, () => {
   console.log(`Server started successfully on Port: ${PORT} `.bgWhite.blue);

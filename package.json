@@ -1,0 +1,14 @@
+{
+  "name": "week-4",
+  "version": "1.0.0",
+  "description": "Real-time Chat Application - Skillify Zone Internship Projects",
+  "main": "index.js",
+  "scripts": {
+    "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
