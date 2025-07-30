@@ -4,11 +4,15 @@
   "description": "Real-time Chat Application - Skillify Zone Internship Projects",
   "main": "index.js",
   "scripts": {
-    "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
     "start": "npm run start --prefix backend"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "path-to-regexp": "^8.2.0",
+    "router": "^2.2.0"
+  }
 }
